@@ -4,7 +4,7 @@ import math
 import os
 import random
 
-import htmd.home
+import moleculekit.home
 import numpy as np
 import transforms3d
 from torch.utils.data import Dataset
@@ -14,7 +14,7 @@ from misc.utils import center_from_pdb_file
 
 logger = logging.getLogger(__name__)
 
-occupancylib = ctypes.cdll.LoadLibrary(os.path.join(htmd.home.home(libDir=True), 'occupancy_ext.so'))
+occupancylib = ctypes.cdll.LoadLibrary(os.path.join(moleculekit.home.home(libDir=True), 'occupancy_ext.so'))
 
 
 class VoxelizedDataset(Dataset):
@@ -37,13 +37,13 @@ class VoxelizedDataset(Dataset):
 
         for i, pdb_entry in enumerate(pdb_list):
             if not os.path.exists(pdb_entry['protein_htmd']):
-                logging.warning(f"HTMD featurization file not found: {pdb_entry['protein_htmd']},"
+                logging.warning(f"MoleculeKit featurization file not found: {pdb_entry['protein_htmd']},"
                                 f"corresponding pdb likely could not be parsed")
                 continue
             self.pdb_list.append(pdb_entry)
             self.pdb_idx.append(i)
 
-        assert len(self.pdb_list) > 0, f'No HTMD could be found but {len(pdb_list)}' \
+        assert len(self.pdb_list) > 0, f'No MoleculeKit could be found but {len(pdb_list)}' \
             f'PDB files were given, please call preprocess_once() on the dataset'
         logger.info('Dataset size: %d', len(self.pdb_list))
 
@@ -74,7 +74,7 @@ class VoxelizedDataset(Dataset):
         return M
 
     def _extract_volume(self, coords, channels, center, num_voxels, resolution=1.0):
-        """ Computes dense volume for htmd preprocessed coordinates """
+        """ Computes dense volume for MoleculeKit preprocessed coordinates """
         assert center.size == 3
         num_voxels = np.array(num_voxels)
         if num_voxels[0] % 2 == 0 and num_voxels[1] % 2 == 0 and num_voxels[2] % 2 == 0:
@@ -97,7 +97,7 @@ class VoxelizedDataset(Dataset):
         return volume, start, centers
 
     @staticmethod
-    def _getOccupancyC(coords, centers, channelsigmas):  # adapted from voxeldescriptors.py in HTMD
+    def _getOccupancyC(coords, centers, channelsigmas):  # adapted from voxeldescriptors.py in MoleculeKit
         """ Calls the C code to calculate the voxels values for each property """
 
         centers = centers.astype(np.float64)

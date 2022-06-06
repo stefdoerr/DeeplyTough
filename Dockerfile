@@ -37,14 +37,14 @@ ADD . /app
 WORKDIR /app
 ENV PYTHONPATH=/app/deeplytough:$PYTHONPATH
 
-# htmd
+# moleculekit
 RUN apt-get -y install openbabel
 RUN source activate deeplytough; \
-    curl -LO https://github.com/Acellera/htmd/archive/refs/tags/1.13.10.tar.gz && \
-    tar -xvzf 1.13.10.tar.gz && rm 1.13.10.tar.gz && cd htmd-1.13.10 && \
+    curl -LO https://github.com/Acellera/moleculekit/archive/refs/tags/1.2.2.tar.gz && \
+    tar -xvzf 1.2.2.tar.gz && rm 1.2.2.tar.gz && cd moleculekit-1.2.2 && \
     python setup.py install && \
     cd .. && \
-    rm -rf htmd-1.13.10;
+    rm -rf moleculekit-1.2.2;
 
 
 RUN source activate deeplytough; \

@@ -6,7 +6,7 @@ import string
 import concurrent.futures
 import numpy as np
 from sklearn.metrics import precision_recall_curve, roc_curve, roc_auc_score
-from misc.utils import htmd_featurizer, voc_ap, RcsbPdbClusters
+from misc.utils import mk_featurizer, voc_ap, RcsbPdbClusters
 from misc.ligand_extract import PocketFromLigandDetector
 
 import logging
@@ -112,7 +112,7 @@ class Prospeccts:
                 open(os.path.join(os.environ['STRUCTURE_DATA_DIR'], 'prospeccts', 'pdbcode_mappings.pickle'), 'wb')
             )
 
-        htmd_featurizer(self.get_structures(extra_mappings=False), skip_existing=True)
+        mk_featurizer(self.get_structures(extra_mappings=False), skip_existing=True)
 
     def _prospeccts_paths(self):
         if self.dbname == 'P1':

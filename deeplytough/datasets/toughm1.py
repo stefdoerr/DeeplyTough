@@ -13,7 +13,7 @@ import requests
 from sklearn.metrics import precision_recall_curve, roc_curve, roc_auc_score
 from sklearn.model_selection import KFold, GroupShuffleSplit
 
-from misc.utils import htmd_featurizer, voc_ap, RcsbPdbClusters, pdb_check_obsolete
+from misc.utils import mk_featurizer, voc_ap, RcsbPdbClusters, pdb_check_obsolete
 
 logger = logging.getLogger(__name__)
 
@@ -131,7 +131,7 @@ class ToughM1:
         )
 
         # prepare coordinates and feature channels for descriptor calculation
-        htmd_featurizer(self.get_structures(), skip_existing=True)
+        mk_featurizer(self.get_structures(), skip_existing=True)
 
     def get_structures(self, extra_mappings=True):
         """

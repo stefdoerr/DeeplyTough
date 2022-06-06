@@ -6,8 +6,8 @@ import urllib.request as request
 from functools import lru_cache
 
 import Bio.PDB as PDB
-import htmd.molecule.molecule as htmdmol
-import htmd.molecule.voxeldescriptors as htmdvox
+import moleculekit.molecule as mkmol
+import moleculekit.tools.voxeldescriptors as mkvox
 import numpy as np
 import requests
 from scipy.spatial import ConvexHull
@@ -131,8 +131,8 @@ def remove_water_and_hets(pdb_path: str, output_file: str) -> str:
     io.save(output_file, NonWaterAndHetsSelect())
 
 
-def htmd_featurizer(pdb_entries, skip_existing=True):
-    """ Ensures than all entries have their HTMD featurization precomputed """
+def mk_featurizer(pdb_entries, skip_existing=True):
+    """ Ensures than all entries have their MoleculeKit featurization precomputed """
     # - note: this is massively hacky but the data also tends to be quite dirty...
 
     # - Mgltools is Python 2.5 only script destroying Python3 environments, so we have to call another conda env
@@ -149,7 +149,7 @@ def htmd_featurizer(pdb_entries, skip_existing=True):
         if skip_existing and os.path.exists(npz_path):
             continue
             
-        logger.info(f'Pre-processing {pdb_path} with HTMD...')
+        logger.info(f'Pre-processing {pdb_path} with MoleculeKit...')
         if not os.path.exists(pdb_path):
             logger.error(f'{pdb_path} not found, skipping its pre-preprocessing.')
             continue
@@ -161,14 +161,14 @@ def htmd_featurizer(pdb_entries, skip_existing=True):
             pdbqt_path = os.path.join(output_dir, os.path.basename(pdb_path)) + 'qt'
             if not os.path.exists(pdbqt_path) and os.path.exists(pdbqt_path.replace('.pdb', '_model1.pdb')):
                 os.rename(pdbqt_path.replace('.pdb', '_model1.pdb'), pdbqt_path)
-            mol = htmdmol.Molecule(pdbqt_path)
+            mol = mkmol.Molecule(pdbqt_path)
 
             # this no longer works (2/12/2021 – non trivial fix, replaced with earlier `remove_water_and_hets`
             # mol.filter('protein')
 
             # slaughtered getVoxelDescriptors()
-            channels = htmdvox._getAtomtypePropertiesPDBQT(mol)
-            sigmas = htmdvox._getRadii(mol)
+            channels = mkvox._getAtomtypePropertiesPDBQT(mol)
+            sigmas = mkvox._getRadii(mol)
             channels = sigmas[:, np.newaxis] * channels.astype(float)
             coords = mol.coords[:, :, mol.frame]
 

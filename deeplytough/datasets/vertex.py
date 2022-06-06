@@ -11,7 +11,7 @@ from sklearn.metrics import precision_recall_curve, roc_curve, roc_auc_score
 from tqdm.autonotebook import tqdm
 
 from misc.ligand_extract import PocketFromLigandDetector
-from misc.utils import htmd_featurizer, voc_ap, RcsbPdbClusters
+from misc.utils import mk_featurizer, voc_ap, RcsbPdbClusters
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +58,7 @@ class Vertex:
             for _ in executor.map(Vertex._download_pdb_and_extract_pocket, entries):
                 pass
 
-        htmd_featurizer(entries, skip_existing=True)
+        mk_featurizer(entries, skip_existing=True)
 
     def get_structures(self, extra_mappings=True):
         """

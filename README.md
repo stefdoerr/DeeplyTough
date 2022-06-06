@@ -17,12 +17,12 @@ Alternatively, environment `deeplytough` can be created inside local [conda](htt
 conda create -y -n deeplytough python=3.6
 conda activate deeplytough
 
-# install legacy version of htmd from source
-curl -LO https://github.com/Acellera/htmd/archive/refs/tags/1.13.10.tar.gz && \
-    tar -xvzf 1.13.10.tar.gz && rm 1.13.10.tar.gz && cd htmd-1.13.10 && \
+# install moleculekit from source
+    curl -LO https://github.com/Acellera/moleculekit/archive/refs/tags/1.2.2.tar.gz && \
+    tar -xvzf 1.2.2.tar.gz && rm 1.2.2.tar.gz && cd moleculekit-1.2.2 && \
     python setup.py install && \
     cd .. && \
-    rm -rf htmd-1.13.10;
+    rm -rf moleculekit-1.2.2;
 
 # install remaining python3 reqs
 apt-get -y install openbabel

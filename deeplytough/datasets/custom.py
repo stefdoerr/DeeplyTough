@@ -1,5 +1,5 @@
 import os
-from misc.utils import htmd_featurizer
+from misc.utils import mk_featurizer
 
 
 class Custom:
@@ -17,7 +17,7 @@ class Custom:
 
     def preprocess_once(self):
         """ Computes featurization """
-        htmd_featurizer(self.get_structures(), skip_existing=True)
+        mk_featurizer(self.get_structures(), skip_existing=True)
 
     def get_structures(self):
         """ Get list of PDB structures with metainfo """
