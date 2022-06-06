@@ -166,13 +166,8 @@ def mk_featurizer(pdb_entries, skip_existing=True):
             # this no longer works (2/12/2021 – non trivial fix, replaced with earlier `remove_water_and_hets`
             # mol.filter('protein')
 
-            # slaughtered getVoxelDescriptors()
-            channels = mkvox._getAtomtypePropertiesPDBQT(mol)
-            sigmas = mkvox._getRadii(mol)
-            channels = sigmas[:, np.newaxis] * channels.astype(float)
-            coords = mol.coords[:, :, mol.frame]
-
-            np.savez(npz_path, channels=channels, coords=coords)
+            channels, mol = mkvox.getChannels(mol, validitychecks=False)
+            np.savez(npz_path, channels=channels, coords=mol.coords[:, :, mol.frame])
 
         with tempfile.TemporaryDirectory() as tmpdirname:
             # use biopython to remove all non-protein atoms
